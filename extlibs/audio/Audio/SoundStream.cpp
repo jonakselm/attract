@@ -30,7 +30,6 @@
 #include <Audio/ALCheck.hpp>
 #include <SFML/System/Sleep.hpp>
 #include <SFML/System/Err.hpp>
-#include <functional>
 
 #ifdef _MSC_VER
     #pragma warning(disable : 4355) // 'this' used in base member initializer list
@@ -108,7 +107,7 @@ void SoundStream::play()
     // Start updating the stream in a separate thread to avoid blocking the application
     m_samplesProcessed = 0;
     m_isStreaming = true;
-    m_thread = std::thread(std::bind(&SoundStream::streamData, this));
+    m_thread = std::thread(&SoundStream::streamData, this);
 }
 
 
@@ -172,7 +171,7 @@ void SoundStream::setPlayingOffset(Time timeOffset)
     // Restart streaming
     m_samplesProcessed = static_cast<std::uint64_t>(timeOffset.asSeconds() * m_sampleRate * m_channelCount);
     m_isStreaming = true;
-    m_thread = std::thread(std::bind(&SoundStream::streamData, this));
+    m_thread = std::thread(&SoundStream::streamData, this);
 }
 
 
